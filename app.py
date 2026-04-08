@@ -4,8 +4,9 @@ import os
 
 app = Flask(__name__)
 
-# Load model safely
-model = pickle.load(open("model.pkl", "rb"))
+# Load model safely (important for deployment)
+model_path = os.path.join(os.getcwd(), "model.pkl")
+model = pickle.load(open(model_path, "rb"))
 
 # Home route
 @app.route("/")
@@ -31,7 +32,6 @@ def predict():
     except Exception as e:
         return jsonify({"error": str(e)})
 
-# Run app
+# Only for local testing (Render will ignore this)
 if __name__ == "__main__":
-    port = int(os.environ.get("PORT", 5000))
-    app.run(host="0.0.0.0", port=port)
+    app.run(debug=True)
